@@ -13,6 +13,7 @@ type MobileLog  struct {
 	Code   string  `json:"cod,omitempty"`
 	CreatTime    int64 `json:"ctime,omitempty"`
 	Expires int64  `json:"exp,omitempty"`
+	Type int64  `json:"typ,omitempty"`
 }
 
 

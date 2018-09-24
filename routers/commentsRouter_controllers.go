@@ -33,6 +33,14 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"],
 		beego.ControllerComments{
+			Method: "CheckMobileCode",
+			Router: `/checkMobileCode`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"],
+		beego.ControllerComments{
 			Method: "GenerateCaptchaHandler",
 			Router: `/generateCaptcha`,
 			AllowHTTPMethods: []string{"post"},
@@ -42,14 +50,6 @@ func init() {
 	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"],
 		beego.ControllerComments{
 			Method: "MobileCode",
-			Router: `/getMobileCode`,
-			AllowHTTPMethods: []string{"post"},
-			MethodParams: param.Make(),
-			Params: nil})
-
-	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:CaptchaController"],
-		beego.ControllerComments{
-			Method: "CheckMobileCode",
 			Router: `/getMobileCode`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams: param.Make(),

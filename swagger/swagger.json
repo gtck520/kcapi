@@ -128,7 +128,7 @@
                 "tags": [
                     "captcha"
                 ],
-                "description": "base64Captcha 验证码验证 参数：{\"Id\": \"关键字\",\"VerifyValue\": \"输入验证码\"}",
+                "description": "base64Captcha 图片验证码验证 参数：{\"Id\": \"关键字\",\"VerifyValue\": \"输入验证码\"}",
                 "operationId": "CaptchaController.get captcha",
                 "parameters": [
                     {
@@ -151,12 +151,40 @@
                 }
             }
         },
+        "/captcha/checkMobileCode": {
+            "post": {
+                "tags": [
+                    "captcha"
+                ],
+                "description": "base64Captcha 手机验证码验证 参数：{\"idkey\": \"关键字\",\"code\":\"验证码\"}",
+                "operationId": "CaptchaController.check MobileCode",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "图像对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MobileLog"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{json}  models.MobileLog.cod"
+                    },
+                    "403": {
+                        "description": "fail"
+                    }
+                }
+            }
+        },
         "/captcha/generateCaptcha": {
             "post": {
                 "tags": [
                     "captcha"
                 ],
-                "description": "base64Captcha 创建验证码 参数：{\"CaptchaType\": \"验证码类型\"} 为空为默认验证码",
+                "description": "base64Captcha 创建图片验证码 参数：{\"CaptchaType\": \"验证码类型\"} 为空为默认验证码",
                 "operationId": "CaptchaController.get captcha",
                 "parameters": [
                     {
@@ -184,8 +212,8 @@
                 "tags": [
                     "captcha"
                 ],
-                "description": "base64Captcha 验证码验证 参数：{\"Mobile\": \"发送的电话号码\"}",
-                "operationId": "CaptchaController.get captcha",
+                "description": "base64Captcha 获取手机验证码 参数：{\"Mobile\": \"发送的电话号码\"}",
+                "operationId": "CaptchaController.get MobileCode",
                 "parameters": [
                     {
                         "in": "body",
@@ -316,6 +344,10 @@
                 },
                 "phone": {
                     "type": "string"
+                },
+                "typ": {
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },

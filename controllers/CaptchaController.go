@@ -151,7 +151,7 @@ func (this *CaptchaController)MobileCode() {
 // @Param	body		body 	models.MobileLog	true		"图像对象"
 // @Success 200 {json}  models.MobileLog.cod
 // @Failure 403 fail
-// @router /getMobileCode [post]
+// @router /checkMobileCode [post]
 func (this *CaptchaController)CheckMobileCode() {
 	//parse request parameters
 	//接收客户端发送来的请求参数
