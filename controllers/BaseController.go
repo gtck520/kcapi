@@ -21,6 +21,15 @@ type BaseController struct {
 	actionName     string             //当前action名称
 	curUser        models.BackendUser //当前用户信息
 }
+//自动检测app身份
+func (this *BaseController) autocheckToken() {
+	tokenstring:=this.Ctx.Input.Header("Authentication-Token")
+	_,err:=this.checkToken(tokenstring,1)
+	if err != nil {
+		this.jsonResult(enums.JRCodeFailed, "身份验证失败",err)
+	}
+}
+
 //检查token是否有效
 func (this *BaseController) checkToken(tokenString string,typea int)(string,error) {
 	mysigningkey := beego.AppConfig.String("jvt::mysigningkey")

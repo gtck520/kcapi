@@ -114,6 +114,8 @@ func (this *CaptchaController)CaptchaVerifyHandle() {
 // @Failure 403 fail
 // @router /getMobileCode [post]
 func (this *CaptchaController)MobileCode() {
+
+    this.autocheckToken()
 	//接收客户端发送来的请求参数
 	var postParameters models.MobileLog
 	json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters)
