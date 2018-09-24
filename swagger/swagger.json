@@ -1,0 +1,447 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "konger basic API",
+        "description": "一个基础的后台框架api",
+        "version": "1.0.1233333",
+        "termsOfService": "http://beego.me/",
+        "contact": {
+            "email": "496317580@qq.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/access/checkToken": {
+            "get": {
+                "tags": [
+                    "access"
+                ],
+                "description": "根据客户端token验证 参数：{TokenString：\"需要验证的token\"}",
+                "operationId": "AccessController.check token",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "token",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.GetTokens"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Object.app_token"
+                    },
+                    "403": {
+                        "description": "appid or appsecret is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "access"
+                ],
+                "description": "根据客户端token验证 参数：{TokenString：\"需要验证的token\"}",
+                "operationId": "AccessController.check token",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "token",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.GetTokens"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Object.app_token"
+                    },
+                    "403": {
+                        "description": "appid or appsecret is empty"
+                    }
+                }
+            }
+        },
+        "/access/getToken": {
+            "get": {
+                "tags": [
+                    "access"
+                ],
+                "description": "根据客户端appid与秘钥获取token",
+                "operationId": "AccessController.get token",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Apiidentity"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Object.app_token"
+                    },
+                    "403": {
+                        "description": "appid or appsecret is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "access"
+                ],
+                "description": "根据客户端appid与秘钥获取token",
+                "operationId": "AccessController.get token",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Apiidentity"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Object.app_token"
+                    },
+                    "403": {
+                        "description": "appid or appsecret is empty"
+                    }
+                }
+            }
+        },
+        "/captcha/captchaVerify": {
+            "post": {
+                "tags": [
+                    "captcha"
+                ],
+                "description": "base64Captcha 验证码验证 参数：{\"Id\": \"关键字\",\"VerifyValue\": \"输入验证码\"}",
+                "operationId": "CaptchaController.get captcha",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "图像对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.ConfigJsonBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{json}  ConfigJsonBody"
+                    },
+                    "403": {
+                        "description": "fail"
+                    }
+                }
+            }
+        },
+        "/captcha/generateCaptcha": {
+            "post": {
+                "tags": [
+                    "captcha"
+                ],
+                "description": "base64Captcha 创建验证码 参数：{\"CaptchaType\": \"验证码类型\"} 为空为默认验证码",
+                "operationId": "CaptchaController.get captcha",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "图像对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.ConfigJsonBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{json}  ConfigJsonBody"
+                    },
+                    "403": {
+                        "description": "fail"
+                    }
+                }
+            }
+        },
+        "/captcha/getMobileCode": {
+            "post": {
+                "tags": [
+                    "captcha"
+                ],
+                "description": "base64Captcha 验证码验证 参数：{\"Mobile\": \"发送的电话号码\"}",
+                "operationId": "CaptchaController.get captcha",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "图像对象",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.MobileLog"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{json}  models.MobileLog.cod"
+                    },
+                    "403": {
+                        "description": "fail"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        ".ConfigJsonBody": {
+            "type": "object"
+        },
+        ".GetTokens": {
+            "type": "object"
+        },
+        "models.Apiidentity": {
+            "title": "Apiidentity",
+            "type": "object",
+            "properties": {
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "appId": {
+                    "type": "string"
+                },
+                "appName": {
+                    "type": "string"
+                },
+                "appSecret": {
+                    "type": "string"
+                },
+                "create_time": {
+                    "type": "string"
+                },
+                "dealline": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.BackendUser": {
+            "title": "BackendUser",
+            "type": "object",
+            "properties": {
+                "Avatar": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "IsSuper": {
+                    "type": "boolean"
+                },
+                "Mobile": {
+                    "type": "string"
+                },
+                "RealName": {
+                    "type": "string"
+                },
+                "ResourceUrlForList": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "RoleBackendUserRel": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.RoleBackendUserRel"
+                    }
+                },
+                "RoleIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "Status": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "UserName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.MobileLog": {
+            "title": "MobileLog",
+            "type": "object",
+            "properties": {
+                "cod": {
+                    "type": "string"
+                },
+                "ctime": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "exp": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "idk": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Resource": {
+            "title": "Resource",
+            "type": "object",
+            "properties": {
+                "HtmlDisabled": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Icon": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Level": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "LinkUrl": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Parent": {
+                    "$ref": "#/definitions/models.Resource"
+                },
+                "RoleResourceRel": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.RoleResourceRel"
+                    }
+                },
+                "Rtype": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Seq": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "SonNum": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Sons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Resource"
+                    }
+                },
+                "UrlFor": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Role": {
+            "title": "Role",
+            "type": "object",
+            "properties": {
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Seq": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.RoleBackendUserRel": {
+            "title": "RoleBackendUserRel",
+            "type": "object",
+            "properties": {
+                "BackendUser": {
+                    "$ref": "#/definitions/models.BackendUser"
+                },
+                "Created": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Role": {
+                    "$ref": "#/definitions/models.Role"
+                }
+            }
+        },
+        "models.RoleResourceRel": {
+            "title": "RoleResourceRel",
+            "type": "object",
+            "properties": {
+                "Created": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Resource": {
+                    "$ref": "#/definitions/models.Resource"
+                },
+                "Role": {
+                    "$ref": "#/definitions/models.Role"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "access",
+            "description": "接口验证模块\n"
+        },
+        {
+            "name": "captcha",
+            "description": "验证码模块\n"
+        }
+    ]
+}
