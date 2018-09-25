@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"github.com/astaxie/beego"
 )
 // 验证码模块
 type CaptchaController struct {
@@ -109,7 +110,7 @@ func (this *CaptchaController)CaptchaVerifyHandle() {
 }
 // @Title get MobileCode
 // @Description base64Captcha 获取手机验证码 参数：{"Mobile": "发送的电话号码"}
-// @Param	body		body 	models.MobileLog	true		"图像对象"
+// @Param	body   body 	models.MobileLog	true		"图像对象"
 // @Success 200 {json}  models.MobileLog.cod
 // @Failure 403 fail
 // @router /getMobileCode [post]
@@ -120,6 +121,8 @@ func (this *CaptchaController)MobileCode() {
 	var postParameters models.MobileLog
 	json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters)
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	beego.Info(fmt.Sprintf("mobile: %s", postParameters.Mobile))
 	if(postParameters.Mobile==""){
 		this.jsonResult(enums.JRCodeFailed,"电话号码不能为空", "")
 	}
@@ -159,7 +162,7 @@ func (this *CaptchaController)CheckMobileCode() {
 	//接收客户端发送来的请求参数
 	var postParameters models.MobileLog
 	json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters)
-	onelog,err:=postParameters.GetOnebyMobile(postParameters.Idkey)
+	onelog,err:=postParameters.GetOnebyIdkey(postParameters.Idkey)
 	if onelog != nil && err == nil {
 		t := time.Now()
 		if(onelog.Expires<t.Unix()){

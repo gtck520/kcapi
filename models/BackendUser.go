@@ -8,7 +8,7 @@ type BackendUser struct {
 	Id                 int
 	RealName           string                `orm:"size(32)"`
 	UserName           string                `orm:"size(24)"`
-	UserPwd            string                `json:"-"`
+	UserPwd            string
 	IsSuper            bool
 	Status             int
 	Mobile             string                `orm:"size(16)"`
@@ -26,7 +26,13 @@ type BackendUserQueryParam struct {
 	Mobile       string //精确查询
 	SearchStatus string //为空不查询，有值精确查询
 }
-
+//用户登录参数
+type LoginParam struct {
+	Username string
+	Userpass string
+	Idkey    string
+	Code     string
+}
 func init() {
 	orm.RegisterModel(new(BackendUser))
 }

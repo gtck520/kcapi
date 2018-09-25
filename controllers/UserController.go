@@ -9,33 +9,40 @@ import (
 	"github.com/gtck520/kcapi/models"
 	"github.com/gtck520/kcapi/utils"
 	"time"
+	"encoding/json"
 )
 
-type LoginController struct {
+type UserController struct {
 	BaseController
 }
 
 // @Title do login
-// @Description 根据用户名密码登录
-// @Param	body		body 	models.BackendUser	true		"The object content"
+// @Description 根据用户名密码登录 {"Username":"string","Userpass":"string","Idkey":"string","Code":"string"}
+// @Param	body  body 	LoginParam {"Username":"string","Userpass":"string","Idkey":"string","Code":"string"}	 true "The object content"
 // @Success 200 {string} models.Object.userinfo
 // @Failure 403 username or password is empty
 // @router /doLogin [post]
-func (this *LoginController) doLogin() {
+func (this *UserController) DoLogin() {
 	remoteAddr := this.Ctx.Request.RemoteAddr
 	addrs := strings.Split(remoteAddr, "::1")
 	if len(addrs) > 1 {
 		remoteAddr = "localhost"
 	}
 
-	username := strings.TrimSpace(this.GetString("UserName"))
-	userpwd := strings.TrimSpace(this.GetString("UserPwd"))
-
+	var postParameters models.LoginParam
+	json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters)
+	username := strings.TrimSpace(postParameters.Username)
+	userpwd := strings.TrimSpace(postParameters.Userpass)
 	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil {
 		beego.Error("LoginTraceAdd error.")
 	}
 	beego.Info(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
 
+	//先验证手机验证码
+	msg,status:=this.checkMobileCode(postParameters.Idkey,postParameters.Code)
+   if(status==false){
+	   this.jsonResult(enums.JRCodeFailed, msg, "")
+   }
 	if len(username) == 0 || len(userpwd) == 0 {
 		this.jsonResult(enums.JRCodeFailed, "用户名和密码不正确", "")
 	}
@@ -57,7 +64,7 @@ func (this *LoginController) doLogin() {
 }
 
 //退出
-func (this *LoginController) Logout() {
+func (this *UserController) Logout() {
 	user := models.BackendUser{}
 	this.SetSession("backenduser", user)
 	//this.pageLogin()

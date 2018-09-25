@@ -13,6 +13,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"strconv"
 	"time"
+	"encoding/json"
 )
 
 type BaseController struct {
@@ -241,4 +242,26 @@ func (this *BaseController) GetRandomString(l int) string {
 	}
 	return string(result)
 }
+//验证手机验证码
+func (this *BaseController)checkMobileCode(idkey,code string) (string,bool){
+	//parse request parameters
+	//接收客户端发送来的请求参数
+	var postParameters models.MobileLog
+	json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters)
+	onelog,err:=postParameters.GetOnebyIdkey(idkey)
+	if onelog != nil && err == nil {
+		t := time.Now()
+		if(onelog.Expires<t.Unix()){
+			return "手机验证码已过期，请重新获取",false
+		}
+		if(onelog.Code==code){
+			return "验证成功",true
+		}else{
+			return "手机验证码错误",false
 
+		}
+	}else{
+		return "验证码不匹配",false
+	}
+
+}

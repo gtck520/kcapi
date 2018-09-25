@@ -55,9 +55,9 @@ func init() {
 			MethodParams: param.Make(),
 			Params: nil})
 
-	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:LoginController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:LoginController"],
+	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:UserController"],
 		beego.ControllerComments{
-			Method: "doLogin",
+			Method: "DoLogin",
 			Router: `/doLogin`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams: param.Make(),
