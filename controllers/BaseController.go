@@ -58,8 +58,10 @@ func (this *BaseController) checkToken(tokenString string,typea int)(string,erro
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		//fmt.Println(claims["foo"], claims["nbf"])
-
 		beego.Info(fmt.Sprintf("调试变量输出 spend: %v", claims))
+		//此处判断解析出来的信息是否正确
+
+
 		return claims["sub"].(string), nil
 	} else {
 		//fmt.Println(err)
@@ -105,7 +107,7 @@ func (this *BaseController) getToken(appid, appscret string) ( string , error) {
 		//beego.Info(fmt.Sprintf("调试变量输出 spend: %d s", ss))
 
 		if err != nil {
-			return "信息检验不正确",err
+			return "信息签名不正确",err
 		}else{
      		return ss,nil
 		}
@@ -113,7 +115,30 @@ func (this *BaseController) getToken(appid, appscret string) ( string , error) {
 		return "用户名或密码不正确",err
 	}
 }
+//根据用户信息生成用户token
+func (this *BaseController)getUserToken(userid string)(string,error){
+	mysigningkey := beego.AppConfig.String("jvt::mysigningkey")
+	issuer := beego.AppConfig.String("jvt::issueru")
+	expiresats := beego.AppConfig.String("jvt::expiresat")
+	expiresat,_  := strconv.Atoi(expiresats)
+	mySigningKey := []byte(mysigningkey)
+	// Create the Claims
+	claims := &jwt.StandardClaims{
+		NotBefore: int64(time.Now().Unix() - 1000),
+		ExpiresAt: int64(time.Now().Unix() + int64(expiresat)),
+		Issuer:    issuer,
+		Subject:   strings.TrimSpace(userid),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	ss, err := token.SignedString(mySigningKey)
+	//beego.Info(fmt.Sprintf("调试变量输出 spend: %d s", ss))
 
+	if err != nil {
+		return "信息签名不正确",err
+	}else{
+		return ss,nil
+	}
+}
 //从session里取用户信息
 func (this *BaseController) adapterUserInfo() {
 	a := this.GetSession("backenduser")

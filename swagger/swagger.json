@@ -234,6 +234,64 @@
                     }
                 }
             }
+        },
+        "/user/doLogin": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "description": "根据用户名密码登录 {\"Username\":\"string\",\"Userpass\":\"string\",\"Idkey\":\"string\",\"Code\":\"string\"}",
+                "operationId": "UserController.do login",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.LoginParam"
+                        },
+                        "default": "{Username:string,Userpass:string,Idkey:string,Code:string}"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Object.userinfo"
+                    },
+                    "403": {
+                        "description": "username or password is empty"
+                    }
+                }
+            }
+        },
+        "/user/getUserInfo": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "description": "根据用户id获取信息 {\"Userid\":\"int\"}",
+                "operationId": "UserController.do login",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "The object content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.userParam"
+                        },
+                        "default": "{Userid:int}"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Object.userinfo"
+                    },
+                    "403": {
+                        "description": "username or password is empty"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -241,6 +299,12 @@
             "type": "object"
         },
         ".GetTokens": {
+            "type": "object"
+        },
+        ".LoginParam": {
+            "type": "object"
+        },
+        ".userParam": {
             "type": "object"
         },
         "models.Apiidentity": {
@@ -266,57 +330,6 @@
                 "dealline": {
                     "type": "integer",
                     "format": "int64"
-                }
-            }
-        },
-        "models.BackendUser": {
-            "title": "BackendUser",
-            "type": "object",
-            "properties": {
-                "Avatar": {
-                    "type": "string"
-                },
-                "Email": {
-                    "type": "string"
-                },
-                "Id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "IsSuper": {
-                    "type": "boolean"
-                },
-                "Mobile": {
-                    "type": "string"
-                },
-                "RealName": {
-                    "type": "string"
-                },
-                "ResourceUrlForList": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "RoleBackendUserRel": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.RoleBackendUserRel"
-                    }
-                },
-                "RoleIds": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer",
-                        "format": "int64"
-                    }
-                },
-                "Status": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "UserName": {
-                    "type": "string"
                 }
             }
         },
@@ -348,120 +361,6 @@
                 "typ": {
                     "type": "integer",
                     "format": "int64"
-                }
-            }
-        },
-        "models.Resource": {
-            "title": "Resource",
-            "type": "object",
-            "properties": {
-                "HtmlDisabled": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Icon": {
-                    "type": "string"
-                },
-                "Id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Level": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "LinkUrl": {
-                    "type": "string"
-                },
-                "Name": {
-                    "type": "string"
-                },
-                "Parent": {
-                    "$ref": "#/definitions/models.Resource"
-                },
-                "RoleResourceRel": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.RoleResourceRel"
-                    }
-                },
-                "Rtype": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Seq": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "SonNum": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Sons": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Resource"
-                    }
-                },
-                "UrlFor": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Role": {
-            "title": "Role",
-            "type": "object",
-            "properties": {
-                "Id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Name": {
-                    "type": "string"
-                },
-                "Seq": {
-                    "type": "integer",
-                    "format": "int64"
-                }
-            }
-        },
-        "models.RoleBackendUserRel": {
-            "title": "RoleBackendUserRel",
-            "type": "object",
-            "properties": {
-                "BackendUser": {
-                    "$ref": "#/definitions/models.BackendUser"
-                },
-                "Created": {
-                    "type": "string",
-                    "format": "string"
-                },
-                "Id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Role": {
-                    "$ref": "#/definitions/models.Role"
-                }
-            }
-        },
-        "models.RoleResourceRel": {
-            "title": "RoleResourceRel",
-            "type": "object",
-            "properties": {
-                "Created": {
-                    "type": "string",
-                    "format": "string"
-                },
-                "Id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Resource": {
-                    "$ref": "#/definitions/models.Resource"
-                },
-                "Role": {
-                    "$ref": "#/definitions/models.Role"
                 }
             }
         }

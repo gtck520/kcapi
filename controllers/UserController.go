@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"strings"
-
+	"strconv"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gtck520/kcapi/enums"
@@ -55,12 +55,32 @@ func (this *UserController) DoLogin() {
 		}
 		//保存用户信息到session
 		this.setBackendUser2Session(user.Id)
-
+		utoken,_:=this.getUserToken(strconv.Itoa(user.Id))
 		//获取用户信息
-		this.jsonResult(enums.JRCodeSucc, "登录成功", "")
+		userinfo := map[string]interface{}{"utoken": utoken, "adminid": user.Id,"username":user.UserName}
+		this.jsonResult(enums.JRCodeSucc, "登录成功", userinfo)
 	} else {
 		this.jsonResult(enums.JRCodeFailed, "用户名或者密码错误", "")
 	}
+}
+// @Title do login
+// @Description 根据用户id获取信息 {"Userid":"int"}
+// @Param	body  body 	userParam {"Userid":"int"}	 true "The object content"
+// @Success 200 {string} models.Object.userinfo
+// @Failure 403 username or password is empty
+// @router /getUserInfo [post]
+func (this *UserController) GetUserInfo(){
+	var postParameters struct {
+		Userid string
+	}
+	json.Unmarshal(this.Ctx.Input.RequestBody, &postParameters)
+	beego.Info(fmt.Sprintf("asdfasdfsdf: %s", postParameters.Userid))
+	userid,_:=strconv.Atoi(postParameters.Userid)
+	userinfo,err := models.BackendUserOne(userid)
+	if err != nil {
+		this.jsonResult(enums.JRCodeFailed, "获取用户信息失败", err)
+	}
+	this.jsonResult(enums.JRCodeSucc, "获取用户信息成功", userinfo)
 }
 
 //退出

@@ -63,4 +63,12 @@ func init() {
 			MethodParams: param.Make(),
 			Params: nil})
 
+	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "GetUserInfo",
+			Router: `/getUserInfo`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams: param.Make(),
+			Params: nil})
+
 }
