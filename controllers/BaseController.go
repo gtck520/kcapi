@@ -25,7 +25,7 @@ type BaseController struct {
 //自动检测app身份
 func (this *BaseController) autocheckToken() {
 	tokenstring:=this.Ctx.Input.Header("Authentication-Token")
-	_,err:=this.checkToken(tokenstring,1)
+	_,err:=this.checkToken(tokenstring,0)
 	if err != nil {
 		this.jsonResult(enums.JRCodeFailed, "身份验证失败",err)
 	}

@@ -14,6 +14,7 @@ type Resource struct {
 	Name            string             `orm:"size(64)"`
 	Parent          *Resource          `orm:"null;rel(fk)"` // RelForeignKey relation
 	Rtype           int
+	RtypeName       string				`orm:"-"`
 	Seq             int
 	Sons            []*Resource        `orm:"reverse(many)"` // fk 的反向关系
 	SonNum          int                `orm:"-"`
@@ -23,6 +24,8 @@ type Resource struct {
 	HtmlDisabled    int                `orm:"-"`             //在html里应用时是否可用
 	Level           int                `orm:"-"`             //第几级，从0开始
 	RoleResourceRel []*RoleResourceRel `orm:"reverse(many)"` // 设置一对多的反向关系
+	Edit            bool				`orm:"-"`             //编辑状态
+	EditValue       int				`orm:"-"`         //编辑暂存值
 }
 
 func init() {
@@ -54,7 +57,7 @@ func ResourceTreeGrid() []*Resource {
 	query := o.QueryTable(ResourceTBName()).OrderBy("seq", "id")
 	list := make([]*Resource, 0)
 	query.All(&list)
-	return resourceList2TreeGrid(list)
+	return resourceList2JsonArray(list)
 }
 
 //ResourceTreeGrid4Parent 获取可以成为某个节点父节点的列表
@@ -131,7 +134,47 @@ func resourceList2TreeGrid(list []*Resource) []*Resource {
 	}
 	return result
 }
-
+//将资源列表转成jsonarray层级格式
+func resourceList2JsonArray(list []*Resource) []*Resource {
+	result := make([]*Resource, 0)
+	for _, item := range list {
+		if item.Parent == nil || item.Parent.Id == 0 {
+			item.Level = 0
+			if item.Rtype==1{
+				item.RtypeName="菜单"
+			}else {
+				item.RtypeName="区域"
+			}
+			item.Edit=false
+			item.EditValue = item.Seq
+			item.Sons =  resourceAddSonsArray(item, list, result)
+			result = append(result, item)
+		}
+	}
+	return result
+}
+//resourceAddSons 添加子菜单层级格式
+func resourceAddSonsArray(cur *Resource, list, result []*Resource) []*Resource {
+	resultson := make([]*Resource, 0)
+	if cur.Level <4 {
+		for _, item := range list {
+			if item.Parent != nil && item.Parent.Id == cur.Id {
+				cur.SonNum++
+				item.Level = cur.Level + 1
+				if item.Rtype==1{
+					item.RtypeName="菜单"
+				}else {
+					item.RtypeName="区域"
+				}
+				item.Edit=false
+				item.EditValue = item.Seq
+				item.Sons = resourceAddSonsArray(item, list, resultson)
+				resultson = append(resultson, item)
+			}
+		}
+	}
+	return resultson
+}
 //resourceAddSons 添加子菜单
 func resourceAddSons(cur *Resource, list, result []*Resource) []*Resource {
 	for _, item := range list {
