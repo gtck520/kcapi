@@ -30,12 +30,37 @@ func (this *BaseController) autocheckToken() {
 		this.jsonResult(enums.JRCodeFailed, "身份验证失败",err)
 	}
 }
+// checkLogin判断用户是否登录，未登录则跳转至登录页面
+// 一定要在BaseController.Prepare()后执行
+func (this *BaseController) checkLogin() {
+	tokenstring:=this.Ctx.Input.Header("Admin-Token")
+	curUserId,err:=this.checkToken(tokenstring,1)
+	if err != nil {
+		this.jsonResult(enums.JRCodeFailed, "身份验证失败",err)
+	}
 
+	if curUserId == "" {
+		//登录页面地址
+		urlstr := this.URLFor("HomeController.Login") + "?url="
+
+		//登录成功后返回的址为当前
+		//returnURL := this.Ctx.Request.URL.Path
+
+		//如果ajax请求则返回相应的错码和跳转的地址
+		if this.Ctx.Input.IsAjax() {
+			//由于是ajax请求，因此地址是header里的Referer
+			returnURL := this.Ctx.Input.Refer()
+			this.jsonResult(enums.JRCodeFailed, "请登录", urlstr+returnURL)
+		}
+		//this.Redirect(urlstr+returnURL, 302)
+		this.StopRun()
+	}
+}
 //检查token是否有效
 func (this *BaseController) checkToken(tokenString string,typea int)(string,error) {
 	mysigningkey := beego.AppConfig.String("jvt::mysigningkey")
 	if(typea == 1){
-		//issuer := beego.AppConfig.String("jvt::issuera")
+		mysigningkey = beego.AppConfig.String("jvt::issuera")
 	}else{
 		//issuer := beego.AppConfig.String("jvt::issueru")
 	}
@@ -82,6 +107,7 @@ func (this *BaseController) Prepare() {
 
 	//从Session里获取数据 设置用户信息
 	this.adapterUserInfo()
+
 }
 
 //根据用户的app信息生成token并存入数据库
@@ -148,26 +174,7 @@ func (this *BaseController) adapterUserInfo() {
 	}
 }
 
-// checkLogin判断用户是否登录，未登录则跳转至登录页面
-// 一定要在BaseController.Prepare()后执行
-func (this *BaseController) checkLogin() {
-	if this.curUser.Id == 0 {
-		//登录页面地址
-		urlstr := this.URLFor("HomeController.Login") + "?url="
 
-		//登录成功后返回的址为当前
-		returnURL := this.Ctx.Request.URL.Path
-
-		//如果ajax请求则返回相应的错码和跳转的地址
-		if this.Ctx.Input.IsAjax() {
-			//由于是ajax请求，因此地址是header里的Referer
-			returnURL := this.Ctx.Input.Refer()
-			this.jsonResult(enums.JRCode302, "请登录", urlstr+returnURL)
-		}
-		this.Redirect(urlstr+returnURL, 302)
-		this.StopRun()
-	}
-}
 
 // 判断某 Controller.Action 当前用户是否有权访问
 func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {

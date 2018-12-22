@@ -153,6 +153,25 @@ paths:
           description: '{json}  models.MobileLog.cod'
         "403":
           description: fail
+  /resource/getTreeGrid:
+    post:
+      tags:
+      - resource
+      description: 获取系统所以资源
+      operationId: ResourceController.get TreeGrid
+      parameters:
+      - in: body
+        name: body
+        description: The object content
+        required: true
+        schema:
+          $ref: '#/definitions/.LoginParam'
+        default: '{Username:string,Userpass:string,Idkey:string,Code:string}'
+      responses:
+        "200":
+          description: '{string} models.Object.resource'
+        "403":
+          description: username or password is empty
   /user/doLogin:
     post:
       tags:

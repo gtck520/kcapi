@@ -30,6 +30,11 @@ func init() {
 				&controllers.UserController{},
 			),
 		),
+		beego.NSNamespace("/resource",
+			beego.NSInclude(
+				&controllers.ResourceController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
