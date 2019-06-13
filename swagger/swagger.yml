@@ -172,6 +172,25 @@ paths:
           description: '{string} models.Object.resource'
         "403":
           description: username or password is empty
+  /resource/parentTreeGrid:
+    post:
+      tags:
+      - resource
+      description: 获取可以成为某节点的父节点列表
+      operationId: ResourceController.get ParentTreeGrid
+      parameters:
+      - in: body
+        name: body
+        description: The object content
+        required: true
+        schema:
+          $ref: '#/definitions/.LoginParam'
+        default: '{Username:string,Userpass:string,Idkey:string,Code:string}'
+      responses:
+        "200":
+          description: '{string} models.Object.resource'
+        "403":
+          description: username or password is empty
   /user/doLogin:
     post:
       tags:

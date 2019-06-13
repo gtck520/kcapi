@@ -15,7 +15,7 @@ import (
 
 func init() {
 	ns := beego.NewNamespace("/v1",
-		beego.NSNamespace("/access",
+			beego.NSNamespace("/access",
 			beego.NSInclude(
 				&controllers.AccessController{},
 			),

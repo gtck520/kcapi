@@ -63,6 +63,14 @@ func init() {
 			MethodParams: param.Make(),
 			Params: nil})
 
+	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:ResourceController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:ResourceController"],
+		beego.ControllerComments{
+			Method: "ParentTreeGrid",
+			Router: `/parentTreeGrid`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams: param.Make(),
+			Params: nil})
+
 	beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/gtck520/kcapi/controllers:UserController"],
 		beego.ControllerComments{
 			Method: "DoLogin",

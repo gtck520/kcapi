@@ -10,7 +10,7 @@ import (
 func main() {
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
-		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
+		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"//配置可访问静态目录
 	}
 	beego.Run()
 }
